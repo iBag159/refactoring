@@ -5,7 +5,7 @@ export function statement (invoice: any, plays: any) {
   const format = new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
 
   for(let perf of invoice.performances) {
-    let thisAmount = amountFor(perf, playFor(perf));
+    let thisAmount = amountFor(perf);
 
     // add volume credits
     volumeCredits += Math.max(perf.audience - 30, 0);
@@ -22,9 +22,9 @@ export function statement (invoice: any, plays: any) {
   return result;
 
   //Extract Function (106)
-  function amountFor (aPerformance: any, play: any) {
+  function amountFor (aPerformance: any) {
     let result = 0;
-    switch(play.type) {
+    switch(playFor(aPerformance).type) {
       case "tragedy":
         result = 40000;
         if(aPerformance.audience > 30) {
@@ -39,7 +39,7 @@ export function statement (invoice: any, plays: any) {
         result += 300 * aPerformance.audience;
         break;
       default:
-        throw new Error(`Unknown type: ${play.type}`);
+        throw new Error(`Unknown type: ${playFor(aPerformance).type}`);
     }
     return result;
   }
