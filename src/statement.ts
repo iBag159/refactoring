@@ -2,7 +2,6 @@ export function statement (invoice: any, plays: any) {
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `Statement for ${invoice.customer}\n`;
-  const format = new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format;
 
   for(let perf of invoice.performances) {
     // add volume credits
@@ -50,5 +49,9 @@ export function statement (invoice: any, plays: any) {
     result += Math.max(aPerformance.audience - 30, 0)
     if ("comedy" === playFor(aPerformance).type) result += Math.floor(aPerformance.audience / 5);
     return result;
+  }
+
+  function format(aNumber: number) {
+    return new Intl.NumberFormat("en-US", {style: "currency", currency: "USD", minimumFractionDigits: 2}).format(aNumber);
   }
 }
