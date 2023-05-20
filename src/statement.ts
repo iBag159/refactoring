@@ -9,7 +9,33 @@ export function statement(invoice: any, plays: any) {
   result += `You earned ${totalVolumeCredits()} credits\n`
   return result
 
-  //Extract Function (106)
+  function totalAmount() {
+    let result = 0;
+    for (let perf of invoice.performances) {
+      result += amountFor(perf)
+    }
+    return result;
+  }
+  function totalVolumeCredits() {
+    let result = 0
+    for (let perf of invoice.performances) {
+      // add volume credits
+      result += volumeCreditsFor(perf)
+    }
+    return result
+  }
+  function usd(aNumber: number) {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(aNumber)
+  }
+  function volumeCreditsFor(aPerformance: any) {
+    let result = 0
+    result += Math.max(aPerformance.audience - 30, 0)
+    if ('comedy' === playFor(aPerformance).type) result += Math.floor(aPerformance.audience / 5)
+    return result
+  }
+  function playFor(aPerformance: any) {
+    return plays[aPerformance.playID]
+  }
   function amountFor(aPerformance: any) {
     let result = 0
     switch (playFor(aPerformance).type) {
@@ -30,38 +56,5 @@ export function statement(invoice: any, plays: any) {
         throw new Error(`Unknown type: ${playFor(aPerformance).type}`)
     }
     return result
-  }
-
-  //Replace Temp with Query (178)
-  function playFor(aPerformance: any) {
-    return plays[aPerformance.playID]
-  }
-
-  function volumeCreditsFor(aPerformance: any) {
-    let result = 0
-    result += Math.max(aPerformance.audience - 30, 0)
-    if ('comedy' === playFor(aPerformance).type) result += Math.floor(aPerformance.audience / 5)
-    return result
-  }
-
-  function usd(aNumber: number) {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(aNumber)
-  }
-
-  function totalVolumeCredits() {
-    let result = 0
-    for (let perf of invoice.performances) {
-      // add volume credits
-      result += volumeCreditsFor(perf)
-    }
-    return result
-  }
-
-  function totalAmount() {
-    let result = 0;
-    for (let perf of invoice.performances) {
-      result += amountFor(perf)
-    }
-    return result;
   }
 }
