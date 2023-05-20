@@ -1,10 +1,14 @@
 export function statement(invoice: any, plays: any) {
-  return renderPlainText(invoice, plays);
+  const statementData = {
+    customer: invoice.customer,
+    performances: invoice.performances
+  }
+  return renderPlainText(statementData, plays);
 }
 
-function renderPlainText(invoice: any, plays: any) {
-  let result = `Statement for ${invoice.customer}\n`
-  for (let perf of invoice.performances) {
+function renderPlainText(data: any, plays: any) {
+  let result = `Statement for ${data.customer}\n`
+  for (let perf of data.performances) {
     // print line for this order
     result += `${playFor(perf).name}: ${usd(amountFor(perf) / 100)} (${perf.audience} seats)\n`
   }
@@ -14,14 +18,14 @@ function renderPlainText(invoice: any, plays: any) {
 
   function totalAmount() {
     let result = 0;
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       result += amountFor(perf)
     }
     return result;
   }
   function totalVolumeCredits() {
     let result = 0
-    for (let perf of invoice.performances) {
+    for (let perf of data.performances) {
       // add volume credits
       result += volumeCreditsFor(perf)
     }
