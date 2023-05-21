@@ -3,34 +3,24 @@ export function statement(invoice: any, plays: any) {
     customer: invoice.customer,
     performances: invoice.performances.map(enrichPerformance),
     totalAmount: {},
-    totalVolumeCredits: {}
+    totalVolumeCredits: {},
   }
-  statementData.totalAmount = totalAmount(statementData);
-  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
-  console.log(statementData);
-  return renderPlainText(statementData);
-
+  statementData.totalAmount = totalAmount(statementData)
+  statementData.totalVolumeCredits = totalVolumeCredits(statementData)
+  console.log(statementData)
+  return renderPlainText(statementData)
   function totalVolumeCredits(data: any) {
-    let result = 0
-    for (let perf of data.performances) {
-      // add volume credits
-      result += perf.volumeCredits;
-    }
-    return result
+    return data.performances.reduce((total: any, p: any) => total + p.volumeCredits, 0);
   }
   function totalAmount(data: any) {
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.amount
-    }
-    return result;
+    return data.performances.reduce((total: any, p: any) => total + p.amount, 0);
   }
   function enrichPerformance(aPerformance: any) {
-    const result = Object.assign({}, aPerformance);
-    result.play = playFor(result);
-    result.amount = amountFor(result);
-    result.volumeCredits = volumeCreditsFor(result);
-    return result;
+    const result = Object.assign({}, aPerformance)
+    result.play = playFor(result)
+    result.amount = amountFor(result)
+    result.volumeCredits = volumeCreditsFor(result)
+    return result
   }
   function volumeCreditsFor(aPerformance: any) {
     let result = 0
@@ -74,9 +64,7 @@ function renderPlainText(data: any) {
   result += `You earned ${data.totalVolumeCredits} credits\n`
   return result
 
-
   function usd(aNumber: number) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2 }).format(aNumber)
   }
-
 }
