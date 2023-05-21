@@ -20,7 +20,6 @@ export function createStatementData(invoice: any, plays: any) {
   function playFor(aPerformance: any) {
     return plays[aPerformance.playID]
   }
-
   function amountFor(aPerformance: any) {
     let result = 0
     switch (aPerformance.play.type) {
@@ -42,14 +41,12 @@ export function createStatementData(invoice: any, plays: any) {
     }
     return result
   }
-
   function volumeCreditsFor(aPerformance: any) {
     let result = 0
     result += Math.max(aPerformance.audience - 30, 0)
     if ('comedy' === aPerformance.play.type) result += Math.floor(aPerformance.audience / 5)
     return result
   }
-
   function totalAmount(data: any) {
     return data.performances.reduce((total: any, p: any) => total + p.amount, 0);
   }
@@ -57,5 +54,4 @@ export function createStatementData(invoice: any, plays: any) {
   function totalVolumeCredits(data: any) {
     return data.performances.reduce((total: any, p: any) => total + p.volumeCredits, 0);
   }
-
 }
