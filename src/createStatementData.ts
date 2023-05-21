@@ -7,25 +7,8 @@ class PerformanceCalculator {
     this.play = aPlay;
   }
   get amount() {
-    let result = 0
-    switch (this.play.type) {
-      case 'tragedy':
-        result = 40000
-        if (this.performance.audience > 30) {
-          result += 1000 * (this.performance.audience - 30)
-        }
-        break
-      case 'comedy':
-        result = 30000
-        if (this.performance.audience > 20) {
-          result += 10000 + 500 * (this.performance.audience - 20)
-        }
-        result += 300 * this.performance.audience
-        break
-      default:
-        throw new Error(`Unknown type: ${this.play.type}`)
-    }
-    return result
+    throw new Error("Subclass responsibility");
+    return 0; // typescript things...
   }
   get volumeCredits() {
     let result = 0
@@ -36,9 +19,24 @@ class PerformanceCalculator {
 }
 
 class TragedyCalculator extends PerformanceCalculator {
+  get amount() {
+    let result = 40000
+    if (this.performance.audience > 30) {
+      result += 1000 * (this.performance.audience - 30)
+    }
+    return result
+  }
 }
 
 class ComedyCalculator extends PerformanceCalculator {
+  get amount() {
+    let result = 30000;
+    if (this.performance.audience > 20) {
+      result += 10000 + 500 * (this.performance.audience - 20)
+    }
+    result += 300 * this.performance.audience;
+    return result;
+  }
 }
 
 function createPerformanceCalculator(aPerformance: any, aPlay: any) {
